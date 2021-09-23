@@ -1,0 +1,45 @@
+{
+  "scripts": {
+    "build:dev": "gulp",
+    "clean": "gulp clean"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "type": "module",
+  "name": "parrot",
+  "version": "1.0.0",
+  "description": "an api for quotes",
+  "main": "index.js",
+  "author": "Micrantha Software <info@micrantha.com>",
+  "license": "Propreitary",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "autoprefixer": "^10.3.5",
+    "cssnano": "^5.0.8",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cache-bust": "^1.4.1",
+    "gulp-changed-in-place": "^2.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-dart-sass": "^1.0.2",
+    "gulp-imagemin": "^8.0.0",
+    "gulp-postcss": "^9.0.1",
+    "gulp-uglify": "^3.0.2",
+    "imagemin": "^8.0.1",
+    "postcss": "^8.3.7",
+    "postcss-normalize": "^10.0.1"
+  }
+}
