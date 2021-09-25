@@ -1,1 +1,0 @@
-{"version":3,"sources":["app.scss","app.css"],"names":[],"mappings":"AACA,SACE,gBCAF,CDGA,QACE,eCAF","file":"app.min.css","sourcesContent":["\n#content {\n  font-size: 1.1rem;\n}\n\n#footer {\n  font-size: 0.5rem;\n}\n","#content {\n  font-size: 1.1rem;\n}\n\n#footer {\n  font-size: 0.5rem;\n}"]}

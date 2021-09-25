@@ -11,15 +11,15 @@ import (
 
 var db storage.Storage
 
-func readQuotes(ctx context.Context, e events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
+func readQuotes(ctx context.Context, e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	quotes, err := db.ListQuotes(context.Background())
+	quotes, err := db.ListQuotes(ctx)
 
 	if err != nil {
-		return responses.ServerError(err)
+		return responses.ServerError(err), err
 	}
 
-	return responses.SuccessJSON(quotes)
+	return responses.SuccessJSON(quotes), nil
 }
 
 func main() {

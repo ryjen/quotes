@@ -1,0 +1,21 @@
+html, body {
+  margin:0;
+  padding:0;
+}
+
+.example .code {
+  border-radius: 1rem;
+  box-shadow: 0.5rem 0.5rem 1rem 1rem silver;
+}
+
+a[name] {
+  display: flex;
+  align-items: baseline;
+}
+
+#footer {
+  display: flex;
+  min-height: 8rem;
+  align-items: center;
+  justify-content: center;
+}

@@ -41,3 +41,15 @@ func TestHandleEvents(t *testing.T) {
 	assert.Equal(t, saved.Text, "testing handle events")
 	assert.Equal(t, saved.Author, "testing")
 }
+
+func TestHandlerInvalidJson(t *testing.T) {
+	res, err := createQuote(context.TODO(), events.APIGatewayProxyRequest{
+		Body: `{
+       "text": "testing handle events",
+       "author": "testing"
+     `,
+	})
+
+	assert.Error(t, err)
+	assert.NotNil(t, res)
+}

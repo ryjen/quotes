@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -12,16 +11,9 @@ import (
 
 var db storage.Storage
 
-func createQuote(ctx context.Context, e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func createQuote(ctx context.Context, quote storage.BaseQuote) (events.APIGatewayProxyResponse, error) {
 
-	var quote storage.BaseQuote
-	err := json.Unmarshal([]byte(e.Body), &quote)
-
-	if err != nil {
-		return responses.InvalidError(), err
-	}
-
-	id, err := db.SaveQuote(context.Background(), quote)
+	id, err := db.SaveQuote(ctx, quote)
 
 	if err != nil {
 		return responses.ServerError(err), err
@@ -31,6 +23,6 @@ func createQuote(ctx context.Context, e events.APIGatewayProxyRequest) (events.A
 }
 
 func main() {
-	db = storage.NewMemoryDB()
+	db = storage.NewDynamoDB()
 	lambda.Start(createQuote)
 }
