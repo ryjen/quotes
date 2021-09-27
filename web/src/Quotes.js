@@ -8,7 +8,10 @@ const Quotes = () => {
 
   useEffect(() => {
     fetch(api.staging)
-      .then(res => res.json())
+      .then(res => {
+        return res.json()
+      })
+      .then( res => JSON.parse(res.body) )
       .then(items => {
         setIsLoaded(true)
         setItems(items)
