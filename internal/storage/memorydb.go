@@ -22,7 +22,7 @@ func (db *MemoryDB) ListQuotes(ctx context.Context) ([]*Quote, error) {
 	return values, nil
 }
 
-func (db *MemoryDB) SaveQuote(ctx context.Context, quote BaseQuote) (string, error) {
+func (db *MemoryDB) SaveQuote(ctx context.Context, quote NewQuote) (string, error) {
 	newQuote := &Quote{quote, newId()}
 	db.quotes[newQuote.ID] = newQuote
 	return newQuote.ID, nil

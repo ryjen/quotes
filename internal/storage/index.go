@@ -1,14 +1,23 @@
 package storage
 
 import (
+	"os"
 	"time"
 
 	"github.com/speps/go-hashids"
 )
 
+func getSalt() string {
+	salt, ok := os.LookupEnv("QUOTES_API_ID_SALT")
+	if !ok {
+		salt = "25e6ac531fb5ab4d58f60f93447e37c8a9e57f040194fe01"
+	}
+	return salt
+}
+
 func newId() string {
 	hd := hashids.NewData()
-	hd.Salt = "25e6ac531fb5ab4d58f60f93447e37c8a9e57f040194fe01"
+	hd.Salt = getSalt()
 	hd.MinLength = 13
 
 	h, _ := hashids.NewWithData(hd)

@@ -4,18 +4,18 @@ import "context"
 
 type SavedQuote = map[string]interface{}
 
-type BaseQuote struct {
+type NewQuote struct {
 	Text   string `json:"text"`
 	Author string `json:"author"`
 }
 
 type Quote struct {
-	BaseQuote
+	NewQuote
 	ID string `json:"id"`
 }
 
 type Storage interface {
 	ListQuotes(context.Context) ([]*Quote, error)
-	SaveQuote(context.Context, BaseQuote) (string, error)
+	SaveQuote(context.Context, NewQuote) (string, error)
 	GetQuote(context.Context, string) (*Quote, error)
 }

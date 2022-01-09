@@ -33,8 +33,8 @@ func (db *DynamoDB) ScanQuotes() (*dynamodb.ScanOutput, error) {
 	return result, err
 }
 
-// NewItem creates a new item as json-like to be stored in DynamoDB database
-func (db *DynamoDB) NewItem(in interface{}) (*dynamodb.PutItemInput, error) {
+// NewQuote creates a new item as json-like to be stored in DynamoDB database
+func (db *DynamoDB) NewQuote(in interface{}) (*dynamodb.PutItemInput, error) {
 	item, err := dynamodbattribute.MarshalMap(in)
 	if err != nil {
 		return nil, err

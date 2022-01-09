@@ -1,2 +1,5 @@
-function.zip
-main
+.envrc
+.env
+bin
+.pids
+.aws-sam

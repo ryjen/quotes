@@ -26,11 +26,11 @@ func (db *DynamoDB) ListQuotes(ctx context.Context) ([]*Quote, error) {
 	return quotes, nil
 }
 
-func (db *DynamoDB) SaveQuote(ctx context.Context, baseQuote BaseQuote) (string, error) {
+func (db *DynamoDB) SaveQuote(ctx context.Context, baseQuote NewQuote) (string, error) {
 
 	quote := &Quote{baseQuote, newId()}
 
-	data, err := db.NewItem(quote)
+	data, err := db.NewQuote(quote)
 
 	if err != nil {
 		return "", err

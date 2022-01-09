@@ -1,28 +1,56 @@
+STACK := quotes
 
-GO	?= go
-LOCAL_LIB := $(shell test -d .micra; echo $$?)
-ifeq ($(LOCAL_LIB),0)
-MICRA_PATH ?= .micra
-else
-MICRA_PATH ?= ~/.local/share/micra
-endif
-PROJECT_NAME ?= "parrot"
-INSTALL_BIN_DIR ?= /home/ryjen/bin
-BIN_DIR ?= ./bin
-CMD ?= ./cmd/$(PROJECT_NAME)
-EXE ?= $(shell basename $(CMD))
+FUNCTIONS_DIR := cmd
+OUTPUT_DIR := bin
 
-CLEANERS += clean-project
+export GOOS ?= linux
+export GOARCH ?= amd64
+export CGO_ENABLED ?= 0
 
-.PHONY: all
-all: help
+FUNCTIONS := $(patsubst $(FUNCTIONS_DIR)/%/., %, $(wildcard $(FUNCTIONS_DIR)/*/.))
+BUILD_FUNCTIONS := $(patsubst %, %.build, $(FUNCTIONS))
 
-.PHONY: clean-project
-clean-project:
-	@echo "Cleaning project"
-	@rm -rf $(BIN_DIR)/*
+help:
+	@echo "build    build lambda functions"
+	@echo "test     run tests"
+	@echo "api      run locally"
+	@echo "deploy   deploy the functions"
 
-# Delegate to scripts folder
+.PHONY: functions
+functions: $(OUTPUT_DIR) $(BUILD_FUNCTIONS)
 
-include $(MICRA_PATH)/library/scripts/index.mk
+$(OUTPUT_DIR):
+	@mkdir -p $@
 
+.PHONY: test
+test:
+	go test ./...
+
+.PHONY: clean
+clean:
+	rm -rf $(OUTPUT_DIR)
+
+.PHONY: install
+install:
+	go get -d ./...
+	go get -t ./...
+
+%.build: 
+	go build -o $(OUTPUT_DIR)/$* $(FUNCTIONS_DIR)/$*/main.go
+
+# compile the code to run in Lambda (local or real)
+.PHONY: lambda
+lambda: functions
+	@echo $(GOOS) $(GOARCH)
+
+.PHONY: build
+build: clean lambda
+	sam build
+
+.PHONY: api
+api: build
+	sam local start-api
+
+.PHONY: deploy
+deploy: build
+	sam deploy --resolve-s3 --stack-name $(STACK) --capabilities CAPABILITY_IAM

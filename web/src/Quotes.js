@@ -7,11 +7,11 @@ const Quotes = () => {
   const [items, setItems] = useState([])
 
   useEffect(() => {
-    fetch(api.staging)
+    fetch(api.current())
       .then(res => {
         return res.json()
       })
-      .then( res => JSON.parse(res.body) )
+      .then(res => JSON.parse(res.body))
       .then(items => {
         setIsLoaded(true)
         setItems(items)

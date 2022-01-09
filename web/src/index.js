@@ -4,15 +4,15 @@ import './index.css'
 import App from './App'
 import Quotes from './Quotes'
 import reportWebVitals from './reportWebVitals'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={App} />
-        <Route path="/app" component={Quotes} />
-      </Switch>
+      <Routes>
+        <Route exact path="/" element={<App />} />
+        <Route path="/app" element={<Quotes />} />
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
