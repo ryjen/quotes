@@ -9,8 +9,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
+const tableName = "quotes"
+
 func (db *DynamoDB) ListQuotes(ctx context.Context) ([]*Quote, error) {
-	data, err := db.ScanQuotes()
+	data, err := db.ScanItems(tableName)
 
 	if err != nil {
 		return nil, err
@@ -26,11 +28,18 @@ func (db *DynamoDB) ListQuotes(ctx context.Context) ([]*Quote, error) {
 	return quotes, nil
 }
 
-func (db *DynamoDB) SaveQuote(ctx context.Context, baseQuote NewQuote) (string, error) {
+func (db *DynamoDB) AddQuote(ctx context.Context, quote NewQuote) (string, error) {
 
-	quote := &Quote{baseQuote, newId()}
+	var id string
 
-	data, err := db.NewQuote(quote)
+	if quote.ID == nil {
+		id = newId()
+		quote.ID = &id
+	} else {
+		id = *quote.ID
+	}
+
+	data, err := db.NewPutItem(tableName, quote)
 
 	if err != nil {
 		return "", err
@@ -42,7 +51,24 @@ func (db *DynamoDB) SaveQuote(ctx context.Context, baseQuote NewQuote) (string, 
 		return "", err
 	}
 
-	return quote.ID, nil
+	return id, nil
+}
+
+func (db *DynamoDB) SaveQuote(ctx context.Context, quote *Quote) error {
+
+	data, err := db.NewUpdateItem(tableName, quote.ID, quote)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.UpdateItem(data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (db *DynamoDB) GetQuote(ctx context.Context, id string) (*Quote, error) {
@@ -68,4 +94,17 @@ func (db *DynamoDB) GetQuote(ctx context.Context, id string) (*Quote, error) {
 	err = dynamodbattribute.UnmarshalMap(item.Item, &quote)
 
 	return quote, err
+}
+
+func (db *DynamoDB) RemoveQuote(ctx context.Context, id string) error {
+
+	item, err := db.NewDeleteItem(tableName, id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.DeleteItem(item)
+
+	return err
 }

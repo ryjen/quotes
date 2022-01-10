@@ -36,6 +36,15 @@ func SuccessJSON(obj interface{}) events.APIGatewayProxyResponse {
 	}
 }
 
+func Success() events.APIGatewayProxyResponse {
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+	}
+}
+
 func SuccessID(id string) events.APIGatewayProxyResponse {
 	return SuccessJSON(map[string]string{
 		"id": id,

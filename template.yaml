@@ -31,6 +31,32 @@ Resources:
             Path: /
             Method: get
 
+  UpdateQuote:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      CodeUri: cmd/update-quote
+      Runtime: go1.x
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: put
+
+  DeleteQuote:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      CodeUri: cmd/delete-quote
+      Runtime: go1.x
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: delete
+
 Outputs:
 
   Endpoint:

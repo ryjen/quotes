@@ -11,9 +11,9 @@ import (
 
 var db storage.Storage
 
-func createQuote(ctx context.Context, quote storage.NewQuote) (events.APIGatewayProxyResponse, error) {
+func createQuote(ctx context.Context, quote storage.Quote) (events.APIGatewayProxyResponse, error) {
 
-	id, err := db.SaveQuote(ctx, quote)
+	id, err := db.AddQuote(ctx, quote)
 
 	if err != nil {
 		return responses.ServerError(err), err

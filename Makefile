@@ -25,6 +25,8 @@ $(OUTPUT_DIR):
 .PHONY: test
 test:
 	go test ./...
+	sam local invoke CreateQuote -e test/create-quote.json
+	# TODO: parse id
 
 .PHONY: clean
 clean:
@@ -41,7 +43,6 @@ install:
 # compile the code to run in Lambda (local or real)
 .PHONY: lambda
 lambda: functions
-	@echo $(GOOS) $(GOARCH)
 
 .PHONY: build
 build: clean lambda
