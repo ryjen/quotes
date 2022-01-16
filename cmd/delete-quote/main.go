@@ -11,7 +11,13 @@ import (
 
 var db storage.Storage
 
-func deleteQuote(ctx context.Context, id string) (events.APIGatewayProxyResponse, error) {
+func deleteQuote(ctx context.Context, e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+
+	id := e.PathParameters["id"]
+
+	if len(id) == 0 {
+		return responses.InvalidRequest(), nil
+	}
 
 	err := db.RemoveQuote(ctx, id)
 

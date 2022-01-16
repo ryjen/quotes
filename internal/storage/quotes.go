@@ -28,18 +28,36 @@ func (db *DynamoDB) ListQuotes(ctx context.Context) ([]*Quote, error) {
 	return quotes, nil
 }
 
-func (db *DynamoDB) AddQuote(ctx context.Context, quote NewQuote) (string, error) {
+func (db *DynamoDB) PageQuotes(ctx context.Context, key string, count int) (*PagedQuotes, error) {
+	data, err := db.PageItems(tableName, key, count)
 
-	var id string
-
-	if quote.ID == nil {
-		id = newId()
-		quote.ID = &id
-	} else {
-		id = *quote.ID
+	if err != nil {
+		return nil, err
 	}
 
-	data, err := db.NewPutItem(tableName, quote)
+	lastKey, hasLastKey := data.LastEvaluatedKey["id"]
+
+	var lastID *string
+
+	if hasLastKey {
+		lastID = lastKey.S
+	}
+
+	var quotes []*Quote
+
+	err = dynamodbattribute.UnmarshalListOfMaps(data.Items, &quotes)
+
+	return &PagedQuotes{quotes, lastID}, err
+
+}
+
+func (db *DynamoDB) AddQuote(ctx context.Context, quote QuoteWithOptionalID) (string, error) {
+
+	id := quote.GetOrGenerateID()
+
+	item := &Quote{quote.QuoteWithoutID, id}
+
+	data, err := db.NewPutItem(tableName, item)
 
 	if err != nil {
 		return "", err
@@ -54,9 +72,35 @@ func (db *DynamoDB) AddQuote(ctx context.Context, quote NewQuote) (string, error
 	return id, nil
 }
 
+func (db *DynamoDB) AddQuotes(ctx context.Context, quotes []QuoteWithOptionalID) ([]string, error) {
+
+	var items []*Quote
+	var ids []string
+
+	for _, q := range quotes {
+		item := &Quote{q.QuoteWithoutID, q.GetOrGenerateID()}
+		items = append(items, item)
+		ids = append(ids, item.ID)
+	}
+
+	data, err := db.NewBatchPutItem(tableName, items)
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.BatchWriteItem(data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ids, nil
+}
+
 func (db *DynamoDB) SaveQuote(ctx context.Context, quote *Quote) error {
 
-	data, err := db.NewUpdateItem(tableName, quote.ID, quote)
+	data, err := db.NewUpdateItem(tableName, quote.ID, quote.QuoteWithoutID)
 
 	if err != nil {
 		return err

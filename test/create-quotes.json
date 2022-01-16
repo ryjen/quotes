@@ -1,8 +1,8 @@
 {
-  "body": "{\"id\": \"101010\",\"text\": \"goodbye, world\",\"author\": \"recovering programmer\"}",
+  "body": "[{\"id\":\"111000\",\"text\":\"hello, universe\",\"author\":\"guru\"},{\"id\":\"000111\",\"text\":\"maybe oneday\",\"author\":\"everyone\"}]",
   "resource": "",
-  "path": "/",
-  "httpMethod": "PUT",
+  "path": "/import",
+  "httpMethod": "POST",
   "isBase64Encoded": true,
   "queryStringParameters": {
     "foo": "bar"
@@ -13,8 +13,7 @@
     ]
   },
   "pathParameters": {
-    "proxy": "/",
-    "id": "101010"
+    "proxy": "/"
   },
   "stageVariables": {
     "baz": "qux"
@@ -115,9 +114,9 @@
       "userAgent": "Custom User Agent String",
       "user": null
     },
-    "path": "/staging/",
+    "path": "/staging/import",
     "resourcePath": "",
-    "httpMethod": "PUT",
+    "httpMethod": "POST",
     "apiId": "1234567890",
     "protocol": "HTTP/1.1"
   }

@@ -15,7 +15,7 @@ func getSalt() string {
 	return salt
 }
 
-func newId() string {
+func NewID() string {
 	hd := hashids.NewData()
 	hd.Salt = getSalt()
 	hd.MinLength = 13

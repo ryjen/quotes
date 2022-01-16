@@ -2,24 +2,24 @@ package main
 
 import (
 	"context"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"micrantha.com/quotes/internal/responses"
 	"micrantha.com/quotes/internal/storage"
 )
 
 var db storage.Storage
 
-func createQuote(ctx context.Context, quote storage.Quote) (events.APIGatewayProxyResponse, error) {
+func createQuote(ctx context.Context, e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	id, err := db.AddQuote(ctx, quote)
+	isImport := strings.HasSuffix(e.Path, "/import")
 
-	if err != nil {
-		return responses.ServerError(err), err
+	if isImport {
+		return importQuotes(ctx, e)
 	}
 
-	return responses.SuccessID(id), err
+	return addQuote(ctx, e)
 }
 
 func main() {

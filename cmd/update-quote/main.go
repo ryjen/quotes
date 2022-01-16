@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -11,9 +12,25 @@ import (
 
 var db storage.Storage
 
-func updateQuote(ctx context.Context, quote *storage.Quote) (events.APIGatewayProxyResponse, error) {
+func updateQuote(ctx context.Context, e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	err := db.SaveQuote(ctx, quote)
+	id := e.PathParameters["id"]
+
+	if len(id) == 0 {
+		return responses.InvalidRequest(), nil
+	}
+
+	var quote storage.Quote
+
+	err := json.Unmarshal([]byte(e.Body), &quote)
+
+	if err != nil {
+		return responses.InvalidEntity(), err
+	}
+
+	quote.ID = id
+
+	err = db.SaveQuote(ctx, &quote)
 
 	if err != nil {
 		return responses.ServerError(err), err

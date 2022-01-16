@@ -2,6 +2,7 @@ import logo from './logo.png';
 import '../node_modules/chota/dist/chota.css'
 import './App.css';
 import { Link } from 'react-router-dom'
+import Api from './Api'
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
 
         <div class="example">
 
+          <div class="header">Get a random quote</div>
+          <div class="content">{Api.current()}/random</div>
 
         </div>
 

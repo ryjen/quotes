@@ -1,11 +1,13 @@
 {
-  "body": "{\"id\": \"101010\",\"text\": \"goodbye, world\",\"author\": \"recovering programmer\"}",
+  "body": "",
   "resource": "",
   "path": "/",
-  "httpMethod": "PUT",
+  "httpMethod": "GET",
   "isBase64Encoded": true,
   "queryStringParameters": {
-    "foo": "bar"
+    "foo": "bar",
+    "page": "101010",
+    "count": "10"
   },
   "multiValueQueryStringParameters": {
     "foo": [
@@ -13,8 +15,7 @@
     ]
   },
   "pathParameters": {
-    "proxy": "/",
-    "id": "101010"
+    "proxy": "/"
   },
   "stageVariables": {
     "baz": "qux"
@@ -117,7 +118,7 @@
     },
     "path": "/staging/",
     "resourcePath": "",
-    "httpMethod": "PUT",
+    "httpMethod": "GET",
     "apiId": "1234567890",
     "protocol": "HTTP/1.1"
   }

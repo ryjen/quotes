@@ -12,23 +12,33 @@ Resources:
       CodeUri: cmd/create-quote
       Runtime: go1.x
       Events:
-        PostEvent:
+        CreateEvent:
           Type: Api
           Properties:
             Path: /
             Method: post
+        ImportEvent:
+          Type: Api
+          Properties:
+            Path: /import
+            Method: post
 
-  ReadQuotes:
+  ReadQuote:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
-      CodeUri: cmd/read-quotes
+      CodeUri: cmd/read-quote
       Runtime: go1.x
       Events:
-        GetEvent:
+        ListEvent:
           Type: Api
           Properties:
             Path: /
+            Method: get
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /{id}
             Method: get
 
   UpdateQuote:
@@ -38,10 +48,10 @@ Resources:
       CodeUri: cmd/update-quote
       Runtime: go1.x
       Events:
-        GetEvent:
+        UpdateEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /{id}
             Method: put
 
   DeleteQuote:
@@ -51,10 +61,10 @@ Resources:
       CodeUri: cmd/delete-quote
       Runtime: go1.x
       Events:
-        GetEvent:
+        DeleteEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /{id}
             Method: delete
 
 Outputs:
